@@ -14,7 +14,6 @@ import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.util.Pair;
 import android.view.MotionEvent;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.wc.R;
@@ -115,12 +114,12 @@ public class AutoResizeTextView extends TextView {
 		 * @param res
 		 */
 		public TextArea(Resources res) {
-			this.maxSize = res.getDimensionPixelSize(R.dimen.gift_text_size_max);
-			this.minSize = res.getDimensionPixelSize(R.dimen.gift_text_size_min);
-			this.maxWidth = res.getDimensionPixelSize(R.dimen.gift_width);
-			this.hspacing = res.getDimensionPixelOffset(R.dimen.gift_text_spacing_beetwen_bottom_and_top_words);
+			this.maxSize = res.getDimensionPixelSize(R.dimen.text_size_max);
+			this.minSize = res.getDimensionPixelSize(R.dimen.text_size_min);
+			this.maxWidth = res.getDimensionPixelSize(R.dimen.textview_width);
+			this.hspacing = res.getDimensionPixelOffset(R.dimen.spacing_beetwen_bottom_and_top_words);
 
-			this.maxHeight = res.getDimensionPixelSize(R.dimen.gift_height);
+			this.maxHeight = res.getDimensionPixelSize(R.dimen.textview_height);
 			this.textPaint.setTextSize(maxSize);
 
 			// init textArea

@@ -1,11 +1,11 @@
 
     <resources>
-        <dimen name="gift_text_size_max">24sp</dimen>
-        <dimen name="gift_text_size_min">10sp</dimen>
-        <dimen name="gift_width">70dp</dimen>
-        <dimen name="gift_height">70dp</dimen>
-        <dimen name="gift_bottom_padding">10dp</dimen>
-        <dimen name="gift_text_spacing_beetwen_bottom_and_top_words">2dp</dimen>
+        <dimen name="text_size_max">24sp</dimen>
+        <dimen name="text_size_min">10sp</dimen>
+        <dimen name="textview_width">70dp</dimen>
+        <dimen name="textview_height">70dp</dimen>
+        <dimen name="textview_bottom_padding">10dp</dimen>
+        <dimen name="spacing_beetwen_bottom_and_top_words">2dp</dimen>
         
-        <item name="gift_max_symbol_length" type="integer">42</item>
+        <item name="max_symbol_length" type="integer">42</item>
     </resources>

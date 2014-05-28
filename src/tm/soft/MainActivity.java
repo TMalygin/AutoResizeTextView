@@ -11,15 +11,14 @@ import com.example.wc.R;
 
 public class MainActivity extends Activity implements TextWatcher {
 
-	private AutoResizeTextView mGift;
+	private AutoResizeTextView mTextView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_layout);
 
-		mGift = (AutoResizeTextView) findViewById(R.id.giftView1);
-
+		mTextView = (AutoResizeTextView) findViewById(R.id.giftView1);
 		((EditText) findViewById(R.id.editText1)).addTextChangedListener(this);
 	}
 
@@ -29,7 +28,7 @@ public class MainActivity extends Activity implements TextWatcher {
 
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
-		mGift.setText(s.toString());
+		mTextView.setText(s.toString());
 	}
 
 	@Override

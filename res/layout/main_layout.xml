@@ -1,12 +1,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:padding="10dp"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:padding="10dp" >
+
 
     <tm.soft.ui.AutoResizeTextView
         android:id="@+id/giftView1"
-        android:layout_width="@dimen/gift_width"
-        android:layout_height="@dimen/gift_height"
+        android:layout_width="@dimen/textview_width"
+        android:layout_height="@dimen/textview_height"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:background="#f0ff" />
@@ -19,6 +20,6 @@
         android:layout_centerHorizontal="true"
         android:ems="10"
         android:inputType="text"
-        android:maxLength="@integer/gift_max_symbol_length" />
+        android:maxLength="@integer/max_symbol_length" />
 
 </RelativeLayout>
