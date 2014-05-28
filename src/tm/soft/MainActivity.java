@@ -1,6 +1,6 @@
 package tm.soft;
 
-import tm.soft.ui.GiftView;
+import tm.soft.ui.AutoResizeTextView;
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -11,14 +11,14 @@ import com.example.wc.R;
 
 public class MainActivity extends Activity implements TextWatcher {
 
-	private GiftView mGift;
+	private AutoResizeTextView mGift;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_layout);
 
-		mGift = (GiftView) findViewById(R.id.giftView1);
+		mGift = (AutoResizeTextView) findViewById(R.id.giftView1);
 
 		((EditText) findViewById(R.id.editText1)).addTextChangedListener(this);
 	}

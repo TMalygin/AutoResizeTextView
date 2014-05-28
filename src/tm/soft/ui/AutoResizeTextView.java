@@ -15,6 +15,7 @@ import android.util.AttributeSet;
 import android.util.Pair;
 import android.view.MotionEvent;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.wc.R;
 
@@ -22,7 +23,7 @@ import com.example.wc.R;
  * @author tmalygin
  * @version 1.0
  */
-public class GiftView extends ImageView {
+public class AutoResizeTextView extends TextView {
 
 	private TextArea mText;
 	private float mTouchedX;
@@ -32,7 +33,7 @@ public class GiftView extends ImageView {
 	 * @param context
 	 * @param attrs
 	 */
-	public GiftView(Context context, AttributeSet attrs) {
+	public AutoResizeTextView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		init(context);
 	}
@@ -42,7 +43,7 @@ public class GiftView extends ImageView {
 	 * @param attrs
 	 * @param defStyle
 	 */
-	public GiftView(Context context, AttributeSet attrs, int defStyle) {
+	public AutoResizeTextView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		init(context);
 	}

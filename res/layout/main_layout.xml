@@ -3,7 +3,7 @@
     android:padding="10dp"
     android:layout_height="match_parent" >
 
-    <tm.soft.ui.GiftView
+    <tm.soft.ui.AutoResizeTextView
         android:id="@+id/giftView1"
         android:layout_width="@dimen/gift_width"
         android:layout_height="@dimen/gift_height"
