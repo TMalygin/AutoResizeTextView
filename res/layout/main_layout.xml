@@ -6,8 +6,10 @@
 
     <tm.soft.ui.AutoResizeTextView
         android:id="@+id/giftView1"
-        android:layout_width="@dimen/textview_width"
-        android:layout_height="@dimen/textview_height"
+        android:maxWidth="@dimen/textview_width"
+        android:maxHeight="@dimen/textview_height"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:background="#f0ff" />

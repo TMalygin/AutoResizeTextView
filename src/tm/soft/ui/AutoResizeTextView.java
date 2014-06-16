@@ -13,7 +13,6 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.util.Pair;
-import android.view.MotionEvent;
 import android.widget.TextView;
 
 import com.example.wc.R;
@@ -25,8 +24,6 @@ import com.example.wc.R;
 public class AutoResizeTextView extends TextView {
 
 	private TextArea mText;
-	private float mTouchedX;
-	private float mTouchedY;
 
 	/**
 	 * @param context
@@ -56,39 +53,23 @@ public class AutoResizeTextView extends TextView {
 		mText.setText(c, "check");
 	}
 
-	/**
-	 * @param text
-	 */
-	public void setText(String text) {
-		mText.setText(getContext(), text);
-		invalidate();
-	}
-
 	@Override
 	protected void onDraw(Canvas canvas) {
-		super.onDraw(canvas);
+		// super.onDraw(canvas);
 		mText.drawText(canvas);
 	}
 
 	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		switch (event.getAction()) {
-		case MotionEvent.ACTION_DOWN:
-			mTouchedX = event.getX();
-			mTouchedY = event.getY();
-			mText.isTouched(mTouchedX, mTouchedY);
-			break;
-		case MotionEvent.ACTION_MOVE:
-			mText.move((int) (mTouchedX - event.getX()), (int) (event.getY() - mTouchedY));
-			mTouchedY = event.getY();
-			invalidate();
-			break;
-		case MotionEvent.ACTION_UP:
-			mText.touchUp((int) event.getX(), (int) event.getY());
-		default:
-			break;
+	protected void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
+		if (mText != null) {
+			mText.checkWidthOfText(text);
+			// setTextSize(TypedValue.COMPLEX_UNIT_PX,
+			// mText.textPaint.getTextSize());
+			setWidth(mText.mTextBitmap.getWidth());
+			setHeight(mText.mTextBitmap.getHeight());
 		}
-		return true;
+		super.onTextChanged(text, start, lengthBefore, lengthAfter);
+
 	}
 
 	/**
@@ -96,19 +77,14 @@ public class AutoResizeTextView extends TextView {
 	 */
 	private static class TextArea {
 
-		private static final int STATE_NORMAL = 0;
-		private static final int STATE_MOVING = 1;
-
-		int state = STATE_NORMAL;
-
 		final int maxWidth, maxHeight;
 		final float maxSize, minSize;
 		final float hspacing;
 
 		Bitmap mTextBitmap;
-		int mTextX, mTextY;
 
 		final Paint textPaint = new Paint();
+		private CharSequence mLastText;
 
 		/**
 		 * @param res
@@ -121,10 +97,6 @@ public class AutoResizeTextView extends TextView {
 
 			this.maxHeight = res.getDimensionPixelSize(R.dimen.textview_height);
 			this.textPaint.setTextSize(maxSize);
-
-			// init textArea
-			mTextX = 0;
-			mTextY = (int) (maxHeight - textPaint.getTextSize());
 
 			checkAreaForText(2);
 		}
@@ -145,7 +117,12 @@ public class AutoResizeTextView extends TextView {
 		 *            - флаг. Был ли вызов этого метода после увеличения размера
 		 *            шрифта
 		 */
-		private void checkWidthOfText(String text) {
+		private void checkWidthOfText(CharSequence text) {
+
+			if (mLastText != null && mLastText.equals(text)) {
+				return;
+			}
+			this.mLastText = text;
 			TextCutter textCutter = new TextCutter();
 
 			Stack<TextLine> result = null;
@@ -155,8 +132,8 @@ public class AutoResizeTextView extends TextView {
 			boolean found = false;
 			while (!found && currentSize > minSize) {
 				textCutter.setFontSize(currentSize);
-				Pair<Boolean, Stack<TextLine>> convert = textCutter.convert(text, (int) hspacing, (int) maxWidth,
-						(int) maxHeight);
+				Pair<Boolean, Stack<TextLine>> convert = textCutter.convert(text.toString(), (int) hspacing,
+						(int) maxWidth, (int) maxHeight);
 
 				if (convert.first) {
 					if (!textCutter.isHasWordParting()) {
@@ -181,11 +158,6 @@ public class AutoResizeTextView extends TextView {
 				if (height <= 0)
 					height = 1;
 				mTextBitmap = Bitmap.createBitmap(maxWidth, (int) height, Config.ARGB_8888);
-
-				if (mTextY > (maxHeight - mTextBitmap.getHeight())) {
-					mTextY = maxHeight - mTextBitmap.getHeight();
-				}
-
 			}
 		}
 
@@ -212,54 +184,8 @@ public class AutoResizeTextView extends TextView {
 		 */
 		public void drawText(Canvas canvas) {
 			if (mTextBitmap.getHeight() > 1)
-				canvas.drawBitmap(mTextBitmap, mTextX, mTextY, textPaint);
+				canvas.drawBitmap(mTextBitmap, 0, 0, textPaint);
 		}
 
-		/**
-		 * @param x
-		 * @param y
-		 * @return
-		 */
-		boolean isTouched(float x, float y) {
-
-			float x2 = x + mTextBitmap.getWidth();
-			float y2 = y + mTextBitmap.getHeight();
-			if (y < this.mTextY || y > y2 || x < this.mTextX || x > x2) {
-				return false;
-			}
-
-			state = STATE_MOVING;
-			return true;
-		}
-
-		/**
-		 * @param diffX
-		 * @param diffY
-		 */
-		void move(int diffX, int diffY) {
-			switch (state) {
-			case STATE_MOVING:
-				int newPosX1 = mTextX + diffX;
-				int newPosY1 = mTextY + diffY;
-
-				if (diffY < 0 && newPosY1 > 0) {
-					mTextY = newPosY1;
-				} else if (diffY > 0 && (newPosY1 + mTextBitmap.getHeight()) < maxHeight) {
-					mTextY = newPosY1;
-				}
-
-				if (diffX < 0 && newPosX1 > 0) {
-					mTextX = newPosX1;
-				} else if (diffX > 0 && (newPosX1 + mTextBitmap.getWidth()) < maxWidth) {
-					mTextX = newPosX1;
-				}
-
-				break;
-			}
-		}
-
-		void touchUp(int x, int y) {
-			state = STATE_NORMAL;
-		}
 	}
 }

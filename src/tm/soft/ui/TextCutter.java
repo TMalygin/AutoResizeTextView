@@ -1,14 +1,16 @@
 package tm.soft.ui;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Stack;
-import java.util.StringTokenizer;
 
 import android.graphics.Paint;
 import android.text.Layout.Alignment;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.Pair;
+
+import com.google.common.base.Splitter;
 
 public class TextCutter {
 
@@ -50,11 +52,9 @@ public class TextCutter {
 	 * @return
 	 */
 	private Stack<String> getWords(String text) {
-		StringTokenizer textTokenizer = new StringTokenizer(text, " ");
+		List<String> splitToList = Splitter.on(" ").trimResults().splitToList(text);
 		Stack<String> words = new Stack<String>();
-		while (textTokenizer.hasMoreElements()) {
-			words.add(textTokenizer.nextToken());
-		}
+		words.addAll(splitToList);
 		Collections.reverse(words);
 		return words;
 	}
