@@ -1,16 +1,16 @@
 package tm.soft.ui;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Stack;
-
 import android.graphics.Paint;
+import android.text.DynamicLayout;
 import android.text.Layout.Alignment;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.Pair;
-
 import com.google.common.base.Splitter;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Stack;
 
 public class TextCutter {
 
@@ -19,6 +19,10 @@ public class TextCutter {
 
 	public void setFontSize(float fontSize) {
 		this.mTextPaint.setTextSize(fontSize);
+	}
+
+	public void setTextPaint(TextPaint textPaint) {
+		mTextPaint = textPaint;
 	}
 
 	public boolean isHasWordParting() {
@@ -42,7 +46,7 @@ public class TextCutter {
 
 		TextLine item = new TextLine();
 		stack.add(item);
-		Boolean res = nood(word, words, mTextPaint, hSpace, maxWidth, maxHeight, maxWidth, maxHeight, item, stack);
+		Boolean res = node(word, words, mTextPaint, hSpace, maxWidth, maxHeight, maxWidth, maxHeight, item, stack);
 
 		return new Pair<Boolean, Stack<TextLine>>(res, stack);
 	}
@@ -73,7 +77,7 @@ public class TextCutter {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	private boolean nood(String word, Stack<String> words, TextPaint p, int hSpace, int freeWidth, int freeHeight,
+	private boolean node(String word, Stack<String> words, TextPaint p, int hSpace, int freeWidth, int freeHeight,
 			int maxWidth, int maxHeight, TextLine cur, Stack<TextLine> stack) {
 
 		if (freeHeight < p.getTextSize()) {
@@ -126,13 +130,13 @@ public class TextCutter {
 
 		TextLine newCur = new TextLine();
 		stack.add(newCur);
-		boolean nood = nood(pair.second, words, p, hSpace, maxWidth, freeHeight, maxWidth, maxHeight, newCur, stack);
-		if (!nood) {
+		boolean node = node(pair.second, words, p, hSpace, maxWidth, freeHeight, maxWidth, maxHeight, newCur, stack);
+		if (!node) {
 			stack.remove(newCur);
 			cur.line.replace(pair.first, "");
 			cur.width = (int) p.measureText(cur.line);
 		}
-		return nood;
+		return node;
 	}
 
 	/**
@@ -161,11 +165,11 @@ public class TextCutter {
 
 		if (words.size() > 0) {
 			freeWidth -= cur.width;
-			boolean nood = nood(words.pop(), words, p, hSpace, freeWidth, freeHeight, maxWidth, maxHeight, cur, stack);
-			if (!nood) {
+			boolean node = node(words.pop(), words, p, hSpace, freeWidth, freeHeight, maxWidth, maxHeight, cur, stack);
+			if (!node) {
 				cur.line.replace(word + " ", "");
 			}
-			return nood;
+			return node;
 		}
 		return true;
 	}
@@ -217,7 +221,8 @@ public class TextCutter {
 			line += text;
 
 			width = (int) p.measureText(line);
-			StaticLayout layout = new StaticLayout(line, p, width, Alignment.ALIGN_NORMAL, 0.0f, 1.0f, true);
+
+			StaticLayout layout = new StaticLayout(line, p, width, Alignment.ALIGN_CENTER, 0.0f, 1.0f, true);
 			heigth = layout.getHeight();
 		}
 
